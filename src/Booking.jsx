@@ -1,12 +1,11 @@
-// src/Booking.jsx
 import React, { useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-const apiKey = import.meta.env.VITE_AMADEUS_API_KEY;
+
 const Booking = () => {
   const location = useLocation();
-  const history = useHistory();
-  const { flight } = location.state;
+  const { flight, apikey } = location.state; // Extract flight and apikey from state
+
   const [travelerDetails, setTravelerDetails] = useState({
     firstName: '',
     lastName: '',
@@ -23,7 +22,6 @@ const Booking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Simulate booking request
       await axios.post('https://test.api.amadeus.com/v1/booking/flight-orders', {
         data: {
           type: 'flight-order',
@@ -57,12 +55,11 @@ const Booking = () => {
           ],
         },
         headers: {
-          'Authorization': `Bearer YOUR_ACCESS_TOKEN`,
+          'Authorization': `Bearer ${apikey}`,
           'Content-Type': 'application/json',
         },
       });
       alert('Booking Successful!');
-      history.push('/');
     } catch (error) {
       console.error('Error booking flight', error);
       alert('Error booking flight');
